@@ -1,0 +1,57 @@
+GET http://localhost:3001/players
+
+###
+POST http://localhost:3001/players
+Content-Type: application/json
+
+{
+    "name": "player 11",
+    "rank": 10 
+}
+
+
+###
+GET http://localhost:3001/rooms
+
+###
+POST http://localhost:3001/rooms
+Content-Type: application/json
+
+{
+    "name": "room-10",
+    "players": ["ce602fe5-d904-481c-9db7-c3225e2323af"
+    ] 
+}
+
+###
+POST http://localhost:3001/rooms
+Content-Type: application/json
+
+{
+    "name": "room-11",
+    "players": ["0b4e0f66-019e-407b-a209-ed74c1761f54"] 
+}
+
+###
+POST http://localhost:3001/rooms/room-10/join
+Content-Type: application/json
+
+{
+   "playerId": "708f8a72-17f6-46e1-b93a-6d4264f88c9f"
+}
+
+### 
+POST http://localhost:3001/queue/start
+Content-Type: application/json
+
+{
+    "name": "room-10"
+}
+
+###
+POST http://localhost:3001/queue/stop
+Content-Type: application/json
+
+{
+    "name": "room-10"
+}

@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    entrypoint: sh -c "yarn && yarn start"
+    ports:
+      - 3001:3001
+    volumes:
+      - .:/home/node/app
