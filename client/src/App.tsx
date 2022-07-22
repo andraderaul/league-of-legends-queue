@@ -1,16 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
-import axios from "axios";
 import io from "socket.io-client";
 import { Login, AcceptMatch, Room, Lobby, ChampionSelect } from "./features";
 import { login, createRoom, joinRoom, startQueue, stopQueue } from "./services";
 
-const BASE_URL = "http://localhost:3001";
-const BASE_SOCKET_URI = "http://localhost:3001";
+const BASE_SOCKET_URI =
+  import.meta.env.VITE_BASE_SOCKET_URI ?? "http://localhost:3001";
 
 const socket = io(BASE_SOCKET_URI);
-const api = axios.create({
-  baseURL: BASE_URL,
-});
 
 export type Status =
   | "initial"

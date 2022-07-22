@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import express, { Express, Request, Response } from 'express'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
@@ -22,14 +23,14 @@ import {
 
 const port = process.env.PORT || 3001
 const corsOptions = {
-  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  origin: [<string>process.env.CLIENT_URL],
 }
 
 const app: Express = express()
 const httpServer = createServer(app)
 const io = new Server(httpServer, {
   cors: {
-    origin: ['http://localhost:3000', 'http://localhost:3001'],
+    ...corsOptions,
   },
 })
 

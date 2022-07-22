@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^4.0.10",
     "axios": "^0.27.2",
     "boring-avatars": "^1.7.0",
     "react": "^18.0.0",
