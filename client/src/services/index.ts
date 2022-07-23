@@ -4,5 +4,5 @@ export {
   joinRoom,
   startQueue,
   stopQueue,
-} from "./httpClient";
-export { socketClient } from "./socketClient";
+} from "./http-client";
+export { socketClient } from "./socket-client";

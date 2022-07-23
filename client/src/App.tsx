@@ -1,12 +1,15 @@
-import { useCallback, useEffect, useState } from "react";
-import io from "socket.io-client";
+import { useCallback, useState } from "react";
 import { Login, AcceptMatch, Room, Lobby, ChampionSelect } from "./features";
-import { login, createRoom, joinRoom, startQueue, stopQueue } from "./services";
-
-const BASE_SOCKET_URI =
-  import.meta.env.VITE_BASE_SOCKET_URI ?? "http://localhost:3001";
-
-const socket = io(BASE_SOCKET_URI);
+import {
+  useActivePlayers,
+  useCreateRoomMutation,
+  useLoginMutation,
+  useMatch,
+  useRoom,
+  useStartQueueMutation,
+  useStopQueueMutation,
+  useMatchMutation,
+} from "./hooks";
 
 export type Status =
   | "initial"
@@ -17,106 +20,34 @@ export type Status =
   | "champion-select";
 
 function App() {
-  const [activePlayers, setActivePlayers] = useState(0);
   const [username, setUsername] = useState("");
   const [status, setStatus] = useState<Status>("initial");
-  const [player, setPlayer] = useState({});
   const [roomName, setRoomName] = useState("");
-  const [room, setRoom] = useState({});
-  const [sides, setSides] = useState<any>({});
+  // const [sides, setSides] = useState<any>({});
 
-  useEffect(() => {
-    socket.on(`rooms-${roomName}`, (data) => {
-      console.log(data);
-      setRoom(data);
-    });
-  }, [roomName]);
-
-  useEffect(() => {
-    console.log("Start Connection");
-    socket.on("active-players", (data) => {
-      setActivePlayers(data);
-    });
-  }, []);
-
-  useEffect(() => {
-    socket.on("match", (data) => {
-      console.log("we have a match");
-      setSides(data);
-      setStatus("accept-match");
-      console.log(data);
-    });
+  const { mutate: loginMutate, data: player } = useLoginMutation({
+    setStatus,
   });
+  const { mutate: roomMutate } = useCreateRoomMutation({ setStatus });
+  const { mutate: startMutate } = useStartQueueMutation({ setStatus });
+  const { mutate: stopMutate } = useStopQueueMutation({ setStatus });
+  const { mutate: matchMutate } = useMatchMutation({ setStatus });
+
+  const { data: room } = useRoom({
+    roomName,
+  });
+  const { data: activePlayers } = useActivePlayers();
+  const { data: sides } = useMatch({ setStatus });
+
+  console.log({ status });
 
   const handlerUserName = useCallback((e) => {
     setUsername(e.target.value);
   }, []);
 
-  const handlerLogin = useCallback(async () => {
-    const response = await login({ username });
-
-    setPlayer(response.data);
-    console.log(response);
-    if (response.data.id) {
-      setStatus("lobby");
-      socket.emit("check-in", response.data.id);
-    }
-  }, [username]);
-
   const handlerRoomName = useCallback((e) => {
     setRoomName(e.target.value);
   }, []);
-
-  const handlerCreateRoom = useCallback(async () => {
-    const response = await createRoom({
-      playerId: player.id,
-      roomName,
-    });
-
-    console.log(response);
-    if (response.data.id) {
-      setStatus("room");
-    }
-  }, [player.id, roomName]);
-
-  const handlerJoinRoom = useCallback(async () => {
-    const response = await joinRoom({
-      playerId: player.id,
-      roomName,
-    });
-
-    console.log(response);
-    if (response.data.id) {
-      setStatus("room");
-    }
-  }, [player.id, roomName]);
-
-  const handlerOnStartQueue = useCallback(async () => {
-    const response = await startQueue({ roomName });
-
-    console.log(response);
-    if (response.data.inQueue) {
-      setStatus("queue");
-    }
-  }, [roomName]);
-
-  const handlerOnStopQueue = useCallback(async () => {
-    const response = await stopQueue({ roomName });
-
-    console.log(response);
-    if (!response.data.inQueue) {
-      setStatus("room");
-    }
-  }, [roomName]);
-
-  const handlerOnMatch = useCallback(async () => {
-    const response = await stopQueue({ roomName });
-
-    console.log(response);
-    if (response.data.id) {
-      setStatus("champion-select");
-    }
-  }, [roomName]);
 
   return (
     <div
@@ -137,14 +68,30 @@ function App() {
         </div>
       )}
       {status === "initial" && (
-        <Login onChange={handlerUserName} onClick={handlerLogin} />
+        <Login
+          onChange={handlerUserName}
+          onClick={() => {
+            loginMutate({ username });
+          }}
+        />
       )}
       {status === "lobby" && (
         <Lobby
           username={username}
           onChange={handlerRoomName}
-          onCreateRoom={handlerCreateRoom}
-          onJoinRoom={handlerJoinRoom}
+          onCreateRoom={() => {
+            roomMutate({
+              playerId: player?.id,
+              roomName,
+            });
+          }}
+          onJoinRoom={() => {
+            roomMutate({
+              playerId: player?.id,
+              roomName,
+              isJoin: true,
+            });
+          }}
         />
       )}
       {(status === "room" ||
@@ -153,13 +100,23 @@ function App() {
         <Room
           room={room}
           player={player}
-          onStopQueue={handlerOnStopQueue}
-          onStartQueue={handlerOnStartQueue}
+          onStopQueue={() => {
+            stopMutate({ roomName });
+          }}
+          onStartQueue={() => {
+            startMutate({ roomName });
+          }}
           status={status}
         />
       )}
 
-      {status === "accept-match" && <AcceptMatch onMatch={handlerOnMatch} />}
+      {status === "accept-match" && (
+        <AcceptMatch
+          onMatch={() => {
+            matchMutate({ roomName });
+          }}
+        />
+      )}
       {status === "champion-select" && <ChampionSelect sides={sides} />}
     </div>
   );
