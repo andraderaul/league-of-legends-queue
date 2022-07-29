@@ -4,7 +4,7 @@ import { matchRepo, roomRepo } from '../repository'
 
 const matches = Router()
 
-/** TODO: need to improve */
+/** TODO: need to improve, under construction */
 matches.post('/', async (req: Request, res: Response) => {
   const stopUseCase = new StopQueueUseCase(roomRepo)
   const createUseCase = new CreateMatchUseCase(matchRepo)

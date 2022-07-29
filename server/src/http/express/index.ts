@@ -29,8 +29,8 @@ app.use(cors(corsOptions))
 app.use(router)
 
 io.on('connection', (socket) => {
-  console.log('Client Connected')
-  console.log(socketIds)
+  console.log('\n->👩‍💻 Client Connected <-\n')
+  console.log('\n->🤾 Players connected<-\n', socketIds)
 
   socket.on('check-in', (userId) => {
     socketIds.set(userId, socket.id)
@@ -45,16 +45,19 @@ io.on('connection', (socket) => {
 })
 
 /* maybe change this in the future */
-// setInterval(findAMatch, 3000)
-async function findAMatch() {
+setInterval(async () => {
   const listAllRooms = new ListAllRoomsUseCase(roomRepo)
   const [_, rooms] = await listAllRooms.execute()
+  console.log('\n###ROOMS###')
   console.log(JSON.stringify({ rooms }, null, 2))
+  console.log('###########\n')
 
   const matchUseCase = new FindMatchUseCase(roomRepo, playerRepo)
   const [error, output] = await matchUseCase.execute()
 
+  console.log('\n###MATCH###')
   console.log({ message: error?.message })
+  console.log('###########\n')
   console.log(JSON.stringify({ match: output }, null, 2))
   if (output?.blueSide !== undefined && output?.redSide !== undefined) {
     output.blueSide.forEach((player) => {
@@ -67,8 +70,8 @@ async function findAMatch() {
       io.to(socketId).emit('match', output)
     })
   }
-}
+}, 3000)
 
 httpServer.listen(port, () => {
-  console.log(`Listening on port: ${port}`)
+  console.log(`🚀 Listening on port: ${port} 🚀`)
 })
