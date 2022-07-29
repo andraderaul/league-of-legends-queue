@@ -117,6 +117,9 @@ export class FindMatchUseCase {
     }
   }
 
+  //READ THOSE:
+  // https://en.wikipedia.org/wiki/Quadratic_assignment_problem
+  // https://www.geeksforgeeks.org/job-assignment-problem-using-branch-and-bound/
   async execute(): Promise<[Error | null, FindMatchOutput | null]> {
     try {
       const rooms = await this.roomRepo.findAllInQueue()

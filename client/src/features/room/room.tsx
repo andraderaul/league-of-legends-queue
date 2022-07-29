@@ -1,6 +1,7 @@
 import Avatar from "boring-avatars";
-import { useCallback, useMemo } from "react";
-import { Status } from "../../App";
+import { useCallback, useContext, useMemo } from "react";
+import { StatusContext } from "../../context";
+import { useStartQueueMutation, useStopQueueMutation } from "../../hooks";
 
 type RoomProps = {
   room: {
@@ -16,18 +17,14 @@ type RoomProps = {
   player: {
     id: string;
   };
-  onStartQueue: any;
-  onStopQueue: any;
-  status: Status;
 };
 
-export const Room = ({
-  room,
-  player,
-  onStartQueue,
-  onStopQueue,
-  status,
-}: RoomProps) => {
+export const Room = ({ room, player }: RoomProps) => {
+  const { status } = useContext(StatusContext);
+
+  const { mutate: startMutate } = useStartQueueMutation();
+  const { mutate: stopMutate } = useStopQueueMutation();
+
   const buttonName = useMemo(
     () => (status === "queue" ? "Stop" : "Start"),
     [status]
@@ -39,8 +36,15 @@ export const Room = ({
   );
 
   const onAction = useCallback(
-    () => (status === "queue" ? onStopQueue() : onStartQueue()),
-    [onStartQueue, onStopQueue, status]
+    () =>
+      status === "queue"
+        ? stopMutate({
+            roomName: room.name,
+          })
+        : startMutate({
+            roomName: room.name,
+          }),
+    [room.name, startMutate, status, stopMutate]
   );
 
   return (

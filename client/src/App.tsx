@@ -1,53 +1,33 @@
-import { useCallback, useState } from "react";
-import { Login, AcceptMatch, Room, Lobby, ChampionSelect } from "./features";
+import { useContext } from "react";
+import { StatusContext } from "./context";
 import {
-  useActivePlayers,
+  Login,
+  AcceptMatch,
+  Room,
+  Lobby,
+  ChampionSelect,
+  ActivePlayers,
+} from "./features";
+import {
   useCreateRoomMutation,
   useLoginMutation,
   useMatch,
   useRoom,
-  useStartQueueMutation,
-  useStopQueueMutation,
   useMatchMutation,
 } from "./hooks";
 
-export type Status =
-  | "initial"
-  | "lobby"
-  | "room"
-  | "queue"
-  | "accept-match"
-  | "champion-select";
-
 function App() {
-  const [username, setUsername] = useState("");
-  const [status, setStatus] = useState<Status>("initial");
-  const [roomName, setRoomName] = useState("");
-  // const [sides, setSides] = useState<any>({});
+  const { status } = useContext(StatusContext);
+  const { data: sides } = useMatch();
 
-  const { mutate: loginMutate, data: player } = useLoginMutation({
-    setStatus,
-  });
-  const { mutate: roomMutate } = useCreateRoomMutation({ setStatus });
-  const { mutate: startMutate } = useStartQueueMutation({ setStatus });
-  const { mutate: stopMutate } = useStopQueueMutation({ setStatus });
-  const { mutate: matchMutate } = useMatchMutation({ setStatus });
-
+  const { mutate: roomMutate, data: createRoom } = useCreateRoomMutation();
   const { data: room } = useRoom({
-    roomName,
+    roomName: createRoom?.name,
   });
-  const { data: activePlayers } = useActivePlayers();
-  const { data: sides } = useMatch({ setStatus });
+  const { mutate: matchMutate } = useMatchMutation();
+  const { mutate: mutateLogin, data: player } = useLoginMutation();
 
-  console.log({ status });
-
-  const handlerUserName = useCallback((e) => {
-    setUsername(e.target.value);
-  }, []);
-
-  const handlerRoomName = useCallback((e) => {
-    setRoomName(e.target.value);
-  }, []);
+  console.log({ status, room, createRoom });
 
   return (
     <div
@@ -57,63 +37,25 @@ function App() {
           : "items-start"
       }`}
     >
-      {status !== "initial" && (
-        <div className="fixed top-8 right-8">
-          <span className="text-xl font-light text-yellow-500 mr-1">
-            Active Players:
-          </span>
-          <span className="text-2xl font-semibold text-green-500">
-            {activePlayers}
-          </span>
-        </div>
-      )}
-      {status === "initial" && (
-        <Login
-          onChange={handlerUserName}
-          onClick={() => {
-            loginMutate({ username });
-          }}
-        />
-      )}
+      {status !== "initial" && <ActivePlayers />}
+      {status === "initial" && <Login handlerLogin={mutateLogin} />}
       {status === "lobby" && (
         <Lobby
-          username={username}
-          onChange={handlerRoomName}
-          onCreateRoom={() => {
-            roomMutate({
-              playerId: player?.id,
-              roomName,
-            });
-          }}
-          onJoinRoom={() => {
-            roomMutate({
-              playerId: player?.id,
-              roomName,
-              isJoin: true,
-            });
-          }}
+          player={player}
+          onCreateRoom={roomMutate}
+          onJoinRoom={roomMutate}
         />
       )}
       {(status === "room" ||
         status === "queue" ||
         status === "accept-match") && (
-        <Room
-          room={room}
-          player={player}
-          onStopQueue={() => {
-            stopMutate({ roomName });
-          }}
-          onStartQueue={() => {
-            startMutate({ roomName });
-          }}
-          status={status}
-        />
+        <Room room={room ?? createRoom} player={player} />
       )}
 
       {status === "accept-match" && (
         <AcceptMatch
           onMatch={() => {
-            matchMutate({ roomName });
+            matchMutate({ roomName: createRoom?.name });
           }}
         />
       )}

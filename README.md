@@ -1,5 +1,8 @@
 # League of Legends Queue
 
+League of Legends is one of the world’s most popular video games, developed by Riot Games. It features
+a team-based competitive game mode based on strategy and outplaying opponents. There are a lot of features in League of Legends, but in this repository I try to make solo queue feature.
+
 ## About
 
 It's a for fun project, I was try to implements something similar to the League of Legends Queue.
@@ -20,7 +23,7 @@ This project has some amazing features, and can be described as follow:
 4. Start a queue;
 5. Accept a game.
 
-## Quickstart
+## Quick start
 
 You can start cloning the repository:
 

@@ -4,6 +4,11 @@ export class PlayerInMemoryRepository implements PlayerRepositoryInterface {
   items: Array<Player> = []
 
   async insert(player: Player): Promise<void> {
+    const playerAlreadyRegister = this.items.find((p) => p.name === player.name)
+    if (playerAlreadyRegister) {
+      throw new Error(`Player name already register ${player.name}`)
+    }
+
     this.items.push(player)
   }
 

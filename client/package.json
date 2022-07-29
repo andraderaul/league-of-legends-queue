@@ -13,6 +13,7 @@
     "boring-avatars": "^1.7.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "react-hot-toast": "^2.3.0",
     "socket.io-client": "^4.5.1"
   },
   "devDependencies": {

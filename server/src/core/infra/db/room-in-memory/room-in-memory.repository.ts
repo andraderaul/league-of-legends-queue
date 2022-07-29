@@ -3,9 +3,15 @@ import { RoomRepositoryInterface, Room } from '../../../domain'
 export class RoomInMemoryRepository implements RoomRepositoryInterface {
   items: Array<Room> = []
 
-  async insert(player: Room): Promise<void> {
-    this.items.push(player)
+  async insert(room: Room): Promise<void> {
+    const roomAlreadyRegister = this.items.find((r) => r.name === room.name)
+    if (roomAlreadyRegister) {
+      throw new Error(`Room name already register ${room.name}`)
+    }
+
+    this.items.push(room)
   }
+
   async findAll(): Promise<Room[]> {
     return this.items
   }

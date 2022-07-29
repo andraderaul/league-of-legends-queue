@@ -1,28 +1,47 @@
+import { useCallback, useState } from "react";
+
 type LobbyProps = {
-  username: string;
-  onCreateRoom: any;
-  onJoinRoom: any;
-  onChange: any;
+  player: {
+    id: string;
+    name: string;
+  };
+  onCreateRoom: ({
+    playerId,
+    roomName,
+  }: {
+    playerId: string;
+    roomName: string;
+  }) => void;
+  onJoinRoom: ({
+    playerId,
+    roomName,
+    isJoin,
+  }: {
+    playerId: string;
+    roomName: string;
+    isJoin: boolean;
+  }) => void;
 };
 
-export const Lobby = ({
-  username,
-  onChange,
-  onCreateRoom,
-  onJoinRoom,
-}: LobbyProps) => {
+export const Lobby = ({ player, onCreateRoom, onJoinRoom }: LobbyProps) => {
+  const [roomName, setRoomName] = useState("");
+
+  const handlerRoomName = useCallback((e) => {
+    setRoomName(e.target.value);
+  }, []);
+
   return (
     <div className="flex flex-col">
       <div className="flex items-end">
         <p className="text-3xl font-light text-yellow-500 mr-1">Welcome </p>
-        <p className="text-5xl text-yellow-500"> {username}!</p>
+        <p className="text-5xl text-yellow-500"> {player.name}!</p>
       </div>
       <input
         type="text"
         className="mt-8 mb-4 px-3 py-2 bg-white border shadow-sm 
         border-slate-200 placeholder-slate-300 focus:outline-none 
         focus:border-yellow-500 focus:ring-yellow-500 block rounded-md sm:text-sm focus:ring-1"
-        onChange={onChange}
+        onChange={handlerRoomName}
         placeholder="Enter a room name"
       />
       <div>
@@ -31,7 +50,12 @@ export const Lobby = ({
           w-26 h-20 text-white text-xl
           hover:bg-green-600 hover:scale-110 
           transition-transform ease-linear"
-          onClick={onCreateRoom}
+          onClick={() => {
+            onCreateRoom({
+              playerId: player?.id,
+              roomName: roomName,
+            });
+          }}
         >
           Create a room
         </button>
@@ -40,7 +64,13 @@ export const Lobby = ({
           w-26 h-20 text-white text-xl
           hover:bg-blue-600 hover:scale-110 
           transition-transform ease-linear"
-          onClick={onJoinRoom}
+          onClick={() =>
+            onJoinRoom({
+              playerId: player?.id,
+              roomName: roomName,
+              isJoin: true,
+            })
+          }
         >
           Join in a room
         </button>

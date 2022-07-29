@@ -1,6 +1,7 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { useContext, useState } from "react";
-import { SocketContext } from "../context";
+import { useMutation } from "@tanstack/react-query";
+import { useContext } from "react";
+import toast from "react-hot-toast";
+import { SocketContext, StatusContext } from "../context";
 import {
   createRoom,
   joinRoom,
@@ -9,21 +10,21 @@ import {
   stopQueue,
 } from "../services";
 
-export const useLoginMutation = ({ setStatus }: { setStatus: any }) => {
+export const useLoginMutation = () => {
   const socket = useContext(SocketContext);
+  const { setStatus } = useContext(StatusContext);
 
   const { mutate, status, data, error } = useMutation(
     ({ username }: { username: string }) => login({ username }),
     {
       onSuccess: ({ data }) => {
-        console.log(data);
         if (data?.id) {
-          setStatus("lobby");
+          setStatus?.("lobby");
           socket.emit("check-in", data?.id);
         }
       },
-      onError: () => {
-        console.error("Login deu ruim");
+      onError: ({ response: { data } }) => {
+        toast.error(data.message);
       },
     }
   );
@@ -31,12 +32,14 @@ export const useLoginMutation = ({ setStatus }: { setStatus: any }) => {
   return {
     mutate,
     status,
-    data: data?.data ?? {},
+    data: data?.data,
     error,
   };
 };
 
-export const useCreateRoomMutation = ({ setStatus }: { setStatus: any }) => {
+export const useCreateRoomMutation = () => {
+  const { setStatus } = useContext(StatusContext);
+
   const { mutate, status, data, error } = useMutation(
     ({
       playerId,
@@ -52,13 +55,12 @@ export const useCreateRoomMutation = ({ setStatus }: { setStatus: any }) => {
         : createRoom({ playerId, roomName }),
     {
       onSuccess: ({ data }) => {
-        console.log(data);
         if (data?.id) {
-          setStatus("room");
+          setStatus?.("room");
         }
       },
-      onError: () => {
-        console.error("Deu room");
+      onError: ({ response: { data } }) => {
+        toast.error(data.message);
       },
     }
   );
@@ -66,22 +68,23 @@ export const useCreateRoomMutation = ({ setStatus }: { setStatus: any }) => {
   return {
     mutate,
     status,
-    data: data?.data ?? {},
+    data: data?.data,
     error,
   };
 };
 
-export const useMatchMutation = ({ setStatus }: { setStatus: any }) => {
+export const useMatchMutation = () => {
+  const { setStatus } = useContext(StatusContext);
   const { mutate, status, data, error } = useMutation(
     ({ roomName }: { roomName: string }) => stopQueue({ roomName }),
     {
       onSuccess: ({ data }) => {
         if (data.id) {
-          setStatus("champion-select");
+          setStatus?.("champion-select");
         }
       },
-      onError: () => {
-        console.error("Use match deu ruim");
+      onError: ({ response: { data } }) => {
+        toast.error(data.message);
       },
     }
   );
@@ -94,48 +97,20 @@ export const useMatchMutation = ({ setStatus }: { setStatus: any }) => {
   };
 };
 
-export const useRoom = ({ roomName }: { roomName: string }) => {
+export const useStartQueueMutation = () => {
   const socket = useContext(SocketContext);
-  const [room, setRoom] = useState({});
-
-  useQuery(["room", roomName], () => {
-    console.log("Listening Room");
-    return socket.on(`rooms-${roomName}`, (data) => {
-      setRoom(data);
-    });
-  });
-
-  return { data: room };
-};
-
-export const useActivePlayers = () => {
-  const [activePlayers, setActivePlayers] = useState(0);
-  const socket = useContext(SocketContext);
-
-  useQuery(["active", "players"], () => {
-    console.log("Start Connection");
-    return socket.on("active-players", (data) => {
-      setActivePlayers(data);
-    });
-  });
-
-  return {
-    data: activePlayers,
-  };
-};
-
-export const useStartQueueMutation = ({ setStatus }: { setStatus: any }) => {
+  const { setStatus } = useContext(StatusContext);
   const { mutate, status, data, error } = useMutation(
     ({ roomName }: { roomName: string }) => startQueue({ roomName }),
     {
       onSuccess: ({ data }) => {
-        console.log(data);
         if (data?.inQueue) {
-          setStatus("queue");
+          setStatus?.("queue");
+          socket.emit("on-queue", true);
         }
       },
-      onError: () => {
-        console.error("Start Queue deu ruim");
+      onError: ({ response: { data } }) => {
+        toast.error(data.message);
       },
     }
   );
@@ -148,18 +123,20 @@ export const useStartQueueMutation = ({ setStatus }: { setStatus: any }) => {
   };
 };
 
-export const useStopQueueMutation = ({ setStatus }: { setStatus: any }) => {
+export const useStopQueueMutation = () => {
+  const socket = useContext(SocketContext);
+  const { setStatus } = useContext(StatusContext);
   const { mutate, status, data, error } = useMutation(
     ({ roomName }: { roomName: string }) => stopQueue({ roomName }),
     {
       onSuccess: ({ data }) => {
-        console.log(data);
         if (!data?.inQueue) {
-          setStatus("room");
+          setStatus?.("room");
+          socket.emit("on-queue", false);
         }
       },
-      onError: () => {
-        console.error("Stop Queue deu ruim");
+      onError: ({ response: { data } }) => {
+        toast.error(data.message);
       },
     }
   );
@@ -169,24 +146,5 @@ export const useStopQueueMutation = ({ setStatus }: { setStatus: any }) => {
     status,
     data: data?.data ?? {},
     error,
-  };
-};
-
-export const useMatch = ({ setStatus }: { setStatus: any }) => {
-  const [sides, setSides] = useState<any>({});
-  const socket = useContext(SocketContext);
-
-  useQuery(["match"], () => {
-    console.log("Listening Match");
-    return socket.on("match", (data) => {
-      console.log("We have a match");
-      console.log(data);
-      setStatus("accept-match");
-      setSides(data);
-    });
-  });
-
-  return {
-    data: sides,
   };
 };

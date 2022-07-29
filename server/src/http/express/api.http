@@ -5,7 +5,7 @@ POST http://localhost:3001/players
 Content-Type: application/json
 
 {
-    "name": "player 11",
+    "name": "player 09",
     "rank": 10 
 }
 
@@ -19,7 +19,8 @@ Content-Type: application/json
 
 {
     "name": "room-10",
-    "players": ["ce602fe5-d904-481c-9db7-c3225e2323af"
+    "players": [
+        "d8dfb5b8-d67f-4fcc-8569-fc9088cf4a48"
     ] 
 }
 
@@ -37,7 +38,7 @@ POST http://localhost:3001/rooms/room-10/join
 Content-Type: application/json
 
 {
-   "playerId": "708f8a72-17f6-46e1-b93a-6d4264f88c9f"
+   "playerId": "69162b33-a09e-475a-8d1b-183ed7968fe6"
 }
 
 ### 
