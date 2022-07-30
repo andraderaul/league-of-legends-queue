@@ -5,4 +5,9 @@ export {
   useStopQueueMutation,
   useMatchMutation,
 } from "./use-queries";
-export { useRoom, useActivePlayers, useMatch } from "./use-hooks";
+export {
+  useRoom,
+  useActivePlayers,
+  useMatch,
+  useAcceptMatch,
+} from "./use-hooks";

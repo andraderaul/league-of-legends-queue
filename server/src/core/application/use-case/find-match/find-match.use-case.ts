@@ -10,7 +10,7 @@ const NUMBER_PLAYERS_PER_SIDE = 1
 type Player = { id: string; name: string; rank: number }
 
 type FindMatchOutput = {
-  matchId: string
+  id: string
   blueSide: Array<Player>
   redSide: Array<Player>
 }
@@ -59,7 +59,7 @@ export class FindMatchUseCase {
         selected[1].roomLength === NUMBER_PLAYERS_PER_SIDE
       ) {
         const result = {
-          matchId: '',
+          id: '',
           blueSide: selected[0].roomPlayers,
           redSide: selected[1].roomPlayers,
         }
@@ -110,7 +110,7 @@ export class FindMatchUseCase {
       }
 
       const result = {
-        matchId: '',
+        id: '',
         blueSide: sides[0],
         redSide: sides[1],
       }
@@ -191,7 +191,7 @@ export class FindMatchUseCase {
       }
 
       const result = {
-        matchId: crypto.randomUUID(),
+        id: crypto.randomUUID(),
         blueSide: sides[0].reduce<Array<Player>>(
           (acc, curr) => [...acc, ...selected[curr].roomPlayers],
           []

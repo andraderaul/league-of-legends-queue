@@ -65,3 +65,27 @@ export const stopQueue = ({ roomName }: { roomName: string }) =>
       name: roomName,
     },
   });
+
+type CreateMatchProps = {
+  roomName: string;
+  playerId: string;
+  matchId: string;
+  side: string;
+};
+
+export const createMatch = ({
+  roomName,
+  playerId,
+  matchId,
+  side,
+}: CreateMatchProps) =>
+  httpClient({
+    method: "POST",
+    url: "/matches",
+    data: {
+      roomName,
+      playerId,
+      side,
+      matchId,
+    },
+  });

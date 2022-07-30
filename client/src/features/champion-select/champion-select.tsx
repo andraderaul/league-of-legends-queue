@@ -1,20 +1,22 @@
 import { Side } from "./components";
 
 type ChampionSelectProps = {
-  sides: {
-    blueSide: Array<{
-      id: string;
-      name: string;
-    }>;
-    redSide: Array<{
-      id: string;
-      name: string;
-    }>;
-  };
+  sides:
+    | {
+        blueSide: Array<{
+          id: string;
+          name: string;
+        }>;
+        redSide: Array<{
+          id: string;
+          name: string;
+        }>;
+      }
+    | undefined;
 };
 
 export const ChampionSelect = ({ sides }: ChampionSelectProps) => {
-  return (
+  return sides !== undefined ? (
     <div className="flex flex-col">
       <h1 className="p-10 text-6xl text-center font-bold text-yellow-500">
         Champion Select
@@ -25,5 +27,5 @@ export const ChampionSelect = ({ sides }: ChampionSelectProps) => {
         <Side title="Red Side" players={sides.redSide} sideColor="red" />
       </div>
     </div>
-  );
+  ) : null;
 };

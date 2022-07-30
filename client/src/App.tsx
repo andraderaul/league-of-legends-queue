@@ -14,11 +14,13 @@ import {
   useMatch,
   useRoom,
   useMatchMutation,
+  useAcceptMatch,
 } from "./hooks";
 
 function App() {
   const { status } = useContext(StatusContext);
-  const { data: sides } = useMatch();
+  const { data: match } = useMatch();
+  const { data: sides } = useAcceptMatch();
 
   const { mutate: roomMutate, data: createRoom } = useCreateRoomMutation();
   const { data: room } = useRoom({
@@ -26,8 +28,6 @@ function App() {
   });
   const { mutate: matchMutate } = useMatchMutation();
   const { mutate: mutateLogin, data: player } = useLoginMutation();
-
-  console.log({ status, room, createRoom });
 
   return (
     <div
@@ -55,7 +55,12 @@ function App() {
       {status === "accept-match" && (
         <AcceptMatch
           onMatch={() => {
-            matchMutate({ roomName: createRoom?.name });
+            matchMutate({
+              roomName: createRoom?.name,
+              matchId: match?.id ?? "",
+              side: match?.side ?? "",
+              playerId: player?.id,
+            });
           }}
         />
       )}

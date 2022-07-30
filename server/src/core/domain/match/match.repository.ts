@@ -1,6 +1,7 @@
-import { Match } from "./match.entity";
+import { Match } from './match.entity'
 
 export interface MatchRepositoryInterface {
-  insert(player: Match): Promise<void>;
-  findAll(): Promise<Array<Match>>;
+  insert(player: Match): Promise<void>
+  findAll(): Promise<Array<Match>>
+  findById(matchId: string): Promise<Match>
 }

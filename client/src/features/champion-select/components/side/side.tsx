@@ -16,7 +16,12 @@ export const Side = ({ players, title, sideColor }: SideProps) => {
         {title}
       </h1>
       {players?.map((b) => (
-        <Card key={b.id} sideColor={sideColor} id={b.id} name={b.name} />
+        <Card
+          key={b.id}
+          sideColor={sideColor}
+          id={b.id}
+          name={b.name ?? "default"}
+        />
       ))}
     </div>
   );

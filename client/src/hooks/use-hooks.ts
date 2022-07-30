@@ -34,21 +34,52 @@ export const useActivePlayers = () => {
   };
 };
 
-export const useMatch = () => {
+type UseMatchData = {
+  side: "BLUE" | "RED";
+  id: string;
+};
+type UseMatch = () => {
+  data: undefined | UseMatchData;
+};
+export const useMatch: UseMatch = () => {
   const { setStatus } = useContext(StatusContext);
-  const [sides, setSides] = useState<any>({});
+  const [data, setData] = useState<UseMatchData | undefined>();
   const socket = useContext(SocketContext);
 
   useEffect(() => {
     console.log("Listening Match");
-    socket.on("match", (data) => {
+    socket.on("match", (matchData) => {
       console.log("We have a match");
       setStatus?.("accept-match");
-      setSides(data);
+      setData(matchData);
     });
   }, [setStatus, socket]);
 
   return {
-    data: sides,
+    data,
+  };
+};
+
+type UseAcceptMatchData = {
+  blueSide: Array<{ name: string; id: string }>;
+  redSide: Array<{ name: string; id: string }>;
+};
+type UseAcceptMatch = () => {
+  data: undefined | UseAcceptMatchData;
+};
+export const useAcceptMatch: UseAcceptMatch = () => {
+  const { setStatus } = useContext(StatusContext);
+  const [data, setData] = useState<UseAcceptMatchData>();
+  const socket = useContext(SocketContext);
+
+  useEffect(() => {
+    console.log("Listening Accept Match");
+    socket.on("accept-match", (matchData) => {
+      setData(matchData);
+    });
+  }, [setStatus, socket]);
+
+  return {
+    data,
   };
 };

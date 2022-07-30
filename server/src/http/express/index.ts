@@ -22,7 +22,7 @@ export const io = new Server(httpServer, {
 })
 
 /* change this for redis on future */
-const socketIds = new Map<string, string>()
+export const socketIds = new Map<string, string>()
 
 app.use(express.json())
 app.use(cors(corsOptions))
@@ -62,12 +62,12 @@ setInterval(async () => {
   if (output?.blueSide !== undefined && output?.redSide !== undefined) {
     output.blueSide.forEach((player) => {
       const socketId = socketIds.get(player.id) || ''
-      io.to(socketId).emit('match', output)
+      io.to(socketId).emit('match', { ...output, side: 'BLUE' })
     })
 
     output.redSide.forEach((player) => {
       const socketId = socketIds.get(player.id) || ''
-      io.to(socketId).emit('match', output)
+      io.to(socketId).emit('match', { ...output, side: 'RED' })
     })
   }
 }, 3000)

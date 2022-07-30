@@ -20,7 +20,7 @@ Content-Type: application/json
 {
     "name": "room-10",
     "players": [
-        "d8dfb5b8-d67f-4fcc-8569-fc9088cf4a48"
+        "49239f79-0e7b-42fc-8b6d-0ca18f1ee21f"
     ] 
 }
 
@@ -63,21 +63,8 @@ POST http://localhost:3001/matches
 Content-Type: application/json
 
 {
-    "sides": {
-        "blueSide": [
-            "0b4e0f66-019e-407b-a209-ed74c1761f44",
-            "0b4e0f66-019e-407b-a209-ed74c1761f52",
-            "0b4e0f66-019e-407b-a209-ed74c1761f53",
-            "0b4e0f66-019e-407b-a209-ed74c1761f54",
-            "0b4e0f66-019e-407b-a209-ed74c1761f55"
-        ],
-        "redSide": [
-            "0b4e0f66-019e-407b-a209-ed74c1761f14",
-            "0b4e0f66-019e-407b-a209-ed74c1761f24",
-            "0b4e0f66-019e-407b-a209-ed74c1761f34",
-            "0b4e0f66-019e-407b-a209-ed74c1761f64",
-            "0b4e0f66-019e-407b-a209-ed74c1761f74"
-        ]
-    },
-    "name": "room-10"
+    "roomName": "room-10",
+    "playerId": "95239f79-0e7b-42fc-8b6d-0ca18f1ee21f",
+    "matchId": "matchid",
+    "side": "BLUE"
 }

@@ -1,6 +1,7 @@
 import crypto from 'crypto'
 
 type PlayersId = Array<string>
+type Side = 'RED' | 'BLUE'
 
 const MAX_PLAYERS_PER_SIDE = 5
 // const MAX_PLAYERS_PER_SIDE = 1
@@ -8,8 +9,10 @@ const MAX_PLAYERS_PER_SIDE = 5
 export type MatchProps = {
   winner?: 'NOT_YET_FINISHED' | 'RED_SIDE' | 'BLUE_SIDE' | 'REMAKE'
   status?: 'CHAMPION_SELECT' | 'LOADING_SCREEN' | 'IN_GAME' | 'FINISHED'
-  blueSide: PlayersId
-  redSide: PlayersId
+  blueSide?: PlayersId
+  redSide?: PlayersId
+  playerId: string
+  side: Side
 }
 
 export class Match {
@@ -17,20 +20,17 @@ export class Match {
   public props: MatchProps
 
   constructor(props: MatchProps, id?: string) {
-    if (
-      this.checkPlayersPerSide(props.blueSide) ||
-      this.checkPlayersPerSide(props.redSide)
-    ) {
-      throw new Error(
-        `Players per side is five and was passed blue = ${props.blueSide.length} and red = ${props.redSide.length}`
-      )
-    }
-
-    if (this.checkDuplicatePlayers([...props.blueSide, ...props.redSide])) {
-      throw new Error(`There are duplicated players`)
+    if (props.side === undefined) {
+      throw new Error(`Missing side property`)
     }
 
     this.id = id ?? crypto.randomUUID()
+    props.blueSide = []
+    props.redSide = []
+    props.side === 'RED'
+      ? (props.redSide = [props.playerId])
+      : (props.blueSide = [props.playerId])
+
     this.props = {
       ...props,
       winner: props.winner ?? 'NOT_YET_FINISHED',
@@ -39,7 +39,7 @@ export class Match {
   }
 
   private checkPlayersPerSide(value: PlayersId) {
-    return value.length !== MAX_PLAYERS_PER_SIDE
+    return value.length > MAX_PLAYERS_PER_SIDE
   }
 
   private checkDuplicatePlayers(value: PlayersId) {
@@ -77,26 +77,56 @@ export class Match {
     this.props.status = value
   }
 
-  private set blueSide(value: PlayersId) {
-    this.props.blueSide = value
+  addPlayer(playerId: string, side: Side) {
+    if (
+      this.checkDuplicatePlayers([
+        ...(this.props?.blueSide ?? []),
+        ...(this.props?.redSide ?? []),
+        playerId,
+      ])
+    ) {
+      throw new Error(`There are duplicated players`)
+    }
+
+    if (
+      side === 'BLUE' &&
+      this.checkPlayersPerSide([...(this.props?.blueSide ?? []), playerId])
+    ) {
+      throw new Error(`Max Players per blue side exceeded`)
+    }
+    if (
+      side === 'RED' &&
+      this.checkPlayersPerSide([...(this.props?.redSide ?? []), playerId])
+    ) {
+      throw new Error(`Max Players per red side exceeded`)
+    }
+
+    side === 'RED' ? (this.redSide = playerId) : (this.blueSide = playerId)
   }
 
-  get blueSide() {
-    return this.props.blueSide
+  private set blueSide(value: string) {
+    this.props.blueSide?.push(value)
   }
 
-  private set redSide(value: PlayersId) {
-    this.props.redSide = value
+  // get blueSide() {
+  //   return this.props?.blueSide
+  // }
+
+  private set redSide(value: string) {
+    this.props.redSide?.push(value)
   }
 
-  get redSide() {
-    return this.props.redSide
-  }
+  // get redSide() {
+  //   return this.props?.redSide
+  // }
 
   toJson() {
     return {
       id: this.id,
-      ...this.props,
+      blueSide: this.props.blueSide ?? [],
+      redSide: this.props.redSide ?? [],
+      winner: this.props.winner,
+      status: this.props.status,
     }
   }
 }

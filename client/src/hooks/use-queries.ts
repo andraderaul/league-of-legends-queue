@@ -8,6 +8,7 @@ import {
   login,
   startQueue,
   stopQueue,
+  createMatch,
 } from "../services";
 
 export const useLoginMutation = () => {
@@ -75,8 +76,15 @@ export const useCreateRoomMutation = () => {
 
 export const useMatchMutation = () => {
   const { setStatus } = useContext(StatusContext);
+  type MutateLogin = {
+    roomName: string;
+    playerId: string;
+    side: string;
+    matchId: string;
+  };
   const { mutate, status, data, error } = useMutation(
-    ({ roomName }: { roomName: string }) => stopQueue({ roomName }),
+    ({ roomName, playerId, matchId, side }: MutateLogin) =>
+      createMatch({ roomName, playerId, matchId, side }),
     {
       onSuccess: ({ data }) => {
         if (data.id) {
