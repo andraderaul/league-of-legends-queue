@@ -4,7 +4,7 @@ import {
   StartQueueUseCase,
   StopQueueUseCase,
 } from '../../../core/application'
-import { playerRepo, roomRepo } from '../repository'
+import { playerRepo, roomRepo } from '../../utils'
 
 const queues = Router()
 

@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express'
-import { io, socketIds } from '../index'
+import { io, socketIds } from '..'
 import {
   CreateMatchUseCase,
   FindPlayerUseCase,
@@ -9,7 +9,6 @@ import { matchRepo, roomRepo, playerRepo } from '../repository'
 
 const matches = Router()
 
-/** TODO: need to improve, under construction */
 matches.post('/', async (req: Request, res: Response) => {
   const stopUseCase = new StopQueueUseCase(roomRepo)
   const createUseCase = new CreateMatchUseCase(matchRepo)

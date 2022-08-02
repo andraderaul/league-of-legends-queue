@@ -1,32 +1,32 @@
 import 'dotenv/config'
 import express, { Express } from 'express'
 import { createServer } from 'http'
-import { Server } from 'socket.io'
 import cors from 'cors'
-import { ListAllRoomsUseCase, FindMatchUseCase } from '../../core/application'
-
-import { playerRepo, roomRepo } from './repository'
 import router from './routes'
+import { Server } from 'socket.io'
+import { playerRepo, roomRepo } from './repository'
+import { FindMatchUseCase, ListAllRoomsUseCase } from '../../core/application'
 
 const port = process.env.PORT || 3001
+const app: Express = express()
+const httpServer = createServer(app)
+
 const corsOptions = {
   origin: [<string>process.env.CLIENT_URL],
 }
 
-const app: Express = express()
-const httpServer = createServer(app)
 export const io = new Server(httpServer, {
   cors: {
     ...corsOptions,
   },
 })
 
-/* change this for redis on future */
-export const socketIds = new Map<string, string>()
-
 app.use(express.json())
 app.use(cors(corsOptions))
 app.use(router)
+
+/* change this for redis on future */
+export const socketIds = new Map<string, string>()
 
 io.on('connection', (socket) => {
   console.log('\n->👩‍💻 Client Connected <-\n')
@@ -39,13 +39,27 @@ io.on('connection', (socket) => {
     console.log(socketIds)
   })
 
-  socket.on('on-queue', (data) => {
-    console.log('on-queue', data)
+  socket.on('start-queue', () => {
+    console.log('start-queue')
+
+    matchmaking()
+  })
+
+  socket.on('stop-queue', () => {
+    console.log('stop-queue')
+
+    matchmaking()
+  })
+
+  socket.on('disconnect', () => {
+    console.log('A user disconnected', socket.id)
+
+    socketIds.delete(socket.id)
   })
 })
 
 /* maybe change this in the future */
-setInterval(async () => {
+async function matchmaking() {
   const listAllRooms = new ListAllRoomsUseCase(roomRepo)
   const [_, rooms] = await listAllRooms.execute()
   console.log('\n###ROOMS###')
@@ -70,7 +84,7 @@ setInterval(async () => {
       io.to(socketId).emit('match', { ...output, side: 'RED' })
     })
   }
-}, 3000)
+}
 
 httpServer.listen(port, () => {
   console.log(`🚀 Listening on port: ${port} 🚀`)

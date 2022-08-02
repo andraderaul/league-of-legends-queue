@@ -114,7 +114,7 @@ export const useStartQueueMutation = () => {
       onSuccess: ({ data }) => {
         if (data?.inQueue) {
           setStatus?.("queue");
-          socket.emit("on-queue", true);
+          socket.emit("start-queue");
         }
       },
       onError: ({ response: { data } }) => {
@@ -140,7 +140,7 @@ export const useStopQueueMutation = () => {
       onSuccess: ({ data }) => {
         if (!data?.inQueue) {
           setStatus?.("room");
-          socket.emit("on-queue", false);
+          socket.emit("stop-queue");
         }
       },
       onError: ({ response: { data } }) => {

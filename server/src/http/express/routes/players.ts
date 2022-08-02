@@ -3,7 +3,7 @@ import {
   CreatePlayerUseCase,
   ListAllPlayersUseCase,
 } from '../../../core/application'
-import { playerRepo } from '../repository'
+import { playerRepo } from '../../utils'
 
 const players = Router()
 

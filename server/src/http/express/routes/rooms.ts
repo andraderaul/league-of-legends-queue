@@ -6,7 +6,7 @@ import {
   ListAllRoomsUseCase,
 } from '../../../core/application'
 import { playerRepo, roomRepo } from '../repository'
-import { io } from '../index'
+import { io } from '..'
 
 const rooms = Router()
 
