@@ -29,7 +29,7 @@ You can start cloning the repository:
 
 ```bash
 
-git clone git@github.com:andraderaul/
+git clone git@github.com:andraderaul/league-of-legends-queue
 ```
 
 You should have a docker installed. Then runs the follow commands:
@@ -53,11 +53,6 @@ docker-compose up
 ## Environments
 
 Todo add this section
-
-## Todo
-
-- [ ] Improve the matching maker
-- [ ] Add a possibility to disconnect
 
 ## Demo
 

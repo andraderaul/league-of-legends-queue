@@ -53,8 +53,12 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     console.log('A user disconnected', socket.id)
-
-    socketIds.delete(socket.id)
+    socketIds.forEach((value, key) => {
+      if (socket.id === value) {
+        socketIds.delete(key)
+      }
+    })
+    io.emit('active-players', socketIds.size)
   })
 })
 
