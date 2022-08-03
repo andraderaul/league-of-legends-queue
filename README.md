@@ -56,7 +56,7 @@ Todo add this section
 
 ## Demo
 
-todo add this section
+![screen-record](./assets/screen-record.gif)
 
 ## Screenshots
 
