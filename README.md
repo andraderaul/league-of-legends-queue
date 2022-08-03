@@ -5,7 +5,8 @@ a team-based competitive game mode based on strategy and outplaying opponents. T
 
 ## About
 
-It's a for fun project, I was try to implements something similar to the League of Legends Queue.
+This is a for fun project, I'm trying to implements something similar to the League of Legends Queue.
+
 The basic premisses is:
 
 1. Each player has a rank;
@@ -17,17 +18,20 @@ The basic premisses is:
 
 This project has some amazing features, and can be described as follow:
 
-1. Create a room;
-2. Invite a player to a room;
-3. Join in a room;
-4. Start a queue;
-5. Accept a game.
+1. Create a player;
+2. Create a room;
+3. Invite a player to a room;
+4. Join in a room;
+5. Start a queue;
+6. Accept a game.
+
+All this features are make by API requests and socket events.
 
 ## Quick start
 
 You can start cloning the repository:
 
-```bash
+```sh
 
 git clone git@github.com:andraderaul/league-of-legends-queue
 ```
@@ -36,7 +40,7 @@ You should have a docker installed. Then runs the follow commands:
 
 In a terminal start the server
 
-```bash
+```sh
 
 cd server
 docker-compose up
@@ -44,7 +48,7 @@ docker-compose up
 
 In a other terminal start the client
 
-```bash
+```sh
 
 cd server
 docker-compose up
@@ -52,15 +56,15 @@ docker-compose up
 
 ## Environments
 
-Todo add this section
+You need to create a `.env` file with the same keys from the `.env.example`. For this you should open a terminal and run this two command:
+
+```sh
+cp client/.env.example client/.env & cp server/.env.example server/.env
+```
 
 ## Demo
 
 ![screen-record](./assets/screen-record.gif)
-
-## Screenshots
-
-todo add this section
 
 ## Stack
 
