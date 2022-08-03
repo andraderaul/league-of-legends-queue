@@ -2,21 +2,11 @@ import Avatar from "boring-avatars";
 import { useCallback, useContext, useMemo } from "react";
 import { StatusContext } from "../../context";
 import { useStartQueueMutation, useStopQueueMutation } from "../../hooks";
+import { Room as RoomT, Player } from "../../types";
 
 type RoomProps = {
-  room: {
-    name: string;
-    owner: string;
-    inQueue: boolean;
-    players?: Array<{
-      id: string;
-      name: string;
-      rank: number;
-    }>;
-  };
-  player: {
-    id: string;
-  };
+  room?: RoomT;
+  player?: Player;
 };
 
 export const Room = ({ room, player }: RoomProps) => {
@@ -39,12 +29,12 @@ export const Room = ({ room, player }: RoomProps) => {
     () =>
       status === "queue"
         ? stopMutate({
-            roomName: room.name,
+            roomName: room?.name ?? "",
           })
         : startMutate({
-            roomName: room.name,
+            roomName: room?.name ?? "",
           }),
-    [room.name, startMutate, status, stopMutate]
+    [room?.name, startMutate, status, stopMutate]
   );
 
   return (
@@ -57,11 +47,11 @@ export const Room = ({ room, player }: RoomProps) => {
         <p className="text-3xl text-yellow-500 mr-1 font-light">
           You are in Room:
         </p>
-        <p className="text-5xl text-yellow-500 font-semibold"> {room.name}!</p>
+        <p className="text-5xl text-yellow-500 font-semibold"> {room?.name}!</p>
       </div>
       <div className="">
         <p className="text-lg text-white text-4xl font-light">Players:</p>
-        {room.players?.map((p) => (
+        {room?.players?.map((p) => (
           <div
             key={p.id}
             className={`flex items-center m-4 p-2 bg-slate-900 rounded-md border-l-4
@@ -80,14 +70,14 @@ export const Room = ({ room, player }: RoomProps) => {
         ))}
       </div>
 
-      {room.owner === player.id && (
+      {room?.owner === player?.id && (
         <button
           className={`mr-2 bg-${buttonColor}-500 rounded-lg
         w-1/2 h-10 text-white 
         hover:bg-${buttonColor}-600 hover:scale-110 
         transition-transform ease-linear`}
           onClick={onAction}
-          disabled={player.id !== room.owner}
+          disabled={player?.id !== room?.owner}
         >
           {buttonName}
         </button>

@@ -1,16 +1,11 @@
+import { Side as SideT } from "../../types";
 import { Side } from "./components";
 
 type ChampionSelectProps = {
   sides:
     | {
-        blueSide: Array<{
-          id: string;
-          name: string;
-        }>;
-        redSide: Array<{
-          id: string;
-          name: string;
-        }>;
+        blueSide: SideT;
+        redSide: SideT;
       }
     | undefined;
 };

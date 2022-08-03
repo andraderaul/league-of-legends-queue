@@ -1,18 +1,21 @@
 import { useContext, useState, useEffect } from "react";
 import { SocketContext, StatusContext } from "../context";
+import { Room, Side } from "../types";
 
-type UseRoomProps = { roomName: string };
+type UseRoomProps = { roomName?: string };
 
 export const useRoom = ({ roomName }: UseRoomProps) => {
   const socket = useContext(SocketContext);
-  const [room, setRoom] = useState(undefined);
+  const [room, setRoom] = useState<Room | undefined>(undefined);
 
   useEffect(() => {
     console.log("Listening Room");
-    socket.on(`rooms-${roomName}`, (data) => {
-      console.log(data);
-      setRoom(data);
-    });
+    if (roomName) {
+      socket.on(`rooms-${roomName}`, (data) => {
+        console.log(data);
+        setRoom(data);
+      });
+    }
   }, [room, roomName, socket]);
 
   return { data: room };
@@ -61,8 +64,8 @@ export const useMatch: UseMatch = () => {
 };
 
 type UseAcceptMatchData = {
-  blueSide: Array<{ name: string; id: string }>;
-  redSide: Array<{ name: string; id: string }>;
+  blueSide: Side;
+  redSide: Side;
 };
 type UseAcceptMatch = () => {
   data: undefined | UseAcceptMatchData;

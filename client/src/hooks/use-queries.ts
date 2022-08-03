@@ -126,7 +126,7 @@ export const useStartQueueMutation = () => {
   return {
     mutate,
     status,
-    data: data?.data ?? {},
+    data: data?.data,
     error,
   };
 };
@@ -152,7 +152,7 @@ export const useStopQueueMutation = () => {
   return {
     mutate,
     status,
-    data: data?.data ?? {},
+    data: data?.data,
     error,
   };
 };

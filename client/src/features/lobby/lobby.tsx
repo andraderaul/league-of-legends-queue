@@ -1,32 +1,37 @@
+import { UseMutateFunction } from "@tanstack/react-query";
+import { AxiosResponse } from "axios";
 import { useCallback, useState } from "react";
+import { Player, Room } from "../../types";
+
+type MutateParams = {
+  playerId: string;
+  roomName: string;
+  isJoin?: boolean | undefined;
+};
+
+type MutateResponse = {
+  response: {
+    data: Room;
+  };
+};
+
+type onMutate = UseMutateFunction<
+  AxiosResponse<Room, any>,
+  MutateResponse,
+  MutateParams,
+  unknown
+>;
 
 type LobbyProps = {
-  player: {
-    id: string;
-    name: string;
-  };
-  onCreateRoom: ({
-    playerId,
-    roomName,
-  }: {
-    playerId: string;
-    roomName: string;
-  }) => void;
-  onJoinRoom: ({
-    playerId,
-    roomName,
-    isJoin,
-  }: {
-    playerId: string;
-    roomName: string;
-    isJoin: boolean;
-  }) => void;
+  player?: Player;
+  onCreateRoom: onMutate;
+  onJoinRoom: onMutate;
 };
 
 export const Lobby = ({ player, onCreateRoom, onJoinRoom }: LobbyProps) => {
   const [roomName, setRoomName] = useState("");
 
-  const handlerRoomName = useCallback((e) => {
+  const handlerRoomName = useCallback((e: any) => {
     setRoomName(e.target.value);
   }, []);
 
@@ -34,7 +39,7 @@ export const Lobby = ({ player, onCreateRoom, onJoinRoom }: LobbyProps) => {
     <div className="flex flex-col">
       <div className="flex items-end">
         <p className="text-3xl font-light text-yellow-500 mr-1">Welcome </p>
-        <p className="text-5xl text-yellow-500"> {player.name}!</p>
+        <p className="text-5xl text-yellow-500"> {player?.name}!</p>
       </div>
       <input
         type="text"
@@ -52,7 +57,7 @@ export const Lobby = ({ player, onCreateRoom, onJoinRoom }: LobbyProps) => {
           transition-transform ease-linear"
           onClick={() => {
             onCreateRoom({
-              playerId: player?.id,
+              playerId: player?.id ?? "",
               roomName: roomName,
             });
           }}
@@ -66,7 +71,7 @@ export const Lobby = ({ player, onCreateRoom, onJoinRoom }: LobbyProps) => {
           transition-transform ease-linear"
           onClick={() =>
             onJoinRoom({
-              playerId: player?.id,
+              playerId: player?.id ?? "",
               roomName: roomName,
               isJoin: true,
             })

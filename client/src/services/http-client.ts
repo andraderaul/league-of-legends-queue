@@ -1,4 +1,5 @@
-import axios from "axios";
+import axios, { AxiosPromise } from "axios";
+import { Player, Room } from "../types";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL ?? "http://localhost:3001";
 
@@ -7,7 +8,11 @@ const httpClient = axios.create({
   baseURL: BASE_URL,
 });
 
-export const login = ({ username }: { username: string }) =>
+export const login = ({
+  username,
+}: {
+  username: string;
+}): AxiosPromise<Player> =>
   httpClient({
     method: "POST",
     url: "/players",
@@ -23,7 +28,7 @@ export const createRoom = ({
 }: {
   roomName: string;
   playerId: string;
-}) =>
+}): AxiosPromise<Room> =>
   httpClient({
     method: "POST",
     url: "/rooms",
@@ -39,7 +44,7 @@ export const joinRoom = ({
 }: {
   roomName: string;
   playerId: string;
-}) =>
+}): AxiosPromise<Room> =>
   httpClient({
     method: "POST",
     url: `/rooms/${roomName}/join`,
@@ -48,7 +53,11 @@ export const joinRoom = ({
     },
   });
 
-export const startQueue = ({ roomName }: { roomName: string }) =>
+export const startQueue = ({
+  roomName,
+}: {
+  roomName: string;
+}): AxiosPromise<Room> =>
   httpClient({
     method: "POST",
     url: `/queue/start`,
@@ -57,7 +66,11 @@ export const startQueue = ({ roomName }: { roomName: string }) =>
     },
   });
 
-export const stopQueue = ({ roomName }: { roomName: string }) =>
+export const stopQueue = ({
+  roomName,
+}: {
+  roomName: string;
+}): AxiosPromise<Room> =>
   httpClient({
     method: "POST",
     url: `/queue/stop`,

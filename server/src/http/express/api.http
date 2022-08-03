@@ -46,7 +46,7 @@ POST http://localhost:3001/queue/start
 Content-Type: application/json
 
 {
-    "name": "room-10"
+    "name": "room-1"
 }
 
 ###

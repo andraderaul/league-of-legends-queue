@@ -56,10 +56,10 @@ function App() {
         <AcceptMatch
           onMatch={() => {
             matchMutate({
-              roomName: createRoom?.name,
+              roomName: createRoom?.name ?? "",
               matchId: match?.id ?? "",
               side: match?.side ?? "",
-              playerId: player?.id,
+              playerId: player?.id ?? "",
             });
           }}
         />

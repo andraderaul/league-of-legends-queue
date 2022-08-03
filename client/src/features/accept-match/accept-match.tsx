@@ -1,5 +1,5 @@
 type AcceptMatchProps = {
-  onMatch: any;
+  onMatch: () => void;
 };
 
 export const AcceptMatch = ({ onMatch }: AcceptMatchProps) => {
