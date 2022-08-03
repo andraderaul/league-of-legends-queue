@@ -1,4 +1,5 @@
 import Avatar from "boring-avatars";
+import { useMemo } from "react";
 
 type CardProps = {
   id: string;
@@ -7,12 +8,17 @@ type CardProps = {
 };
 
 export const Card = ({ id, name, sideColor }: CardProps) => {
+  const style = useMemo(
+    () =>
+      `flex items-center m-4 p-2 bg-slate-900 rounded-md 
+      border-l-8  ${
+        sideColor === "blue" ? "border-blue-500" : "border-red-500"
+      }`,
+    [sideColor]
+  );
+
   return (
-    <div
-      key={id}
-      className={`flex items-center m-4 p-2 bg-slate-900 rounded-md 
-    border-l-8 border-${sideColor}-500`}
-    >
+    <div key={id} className={style}>
       <div className="hover:scale-105 transition-transform ease-linear m-2">
         <Avatar
           size={80}
