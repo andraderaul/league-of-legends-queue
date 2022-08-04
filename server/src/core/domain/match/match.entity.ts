@@ -3,8 +3,7 @@ import crypto from 'crypto'
 type PlayersId = Array<string>
 type Side = 'RED' | 'BLUE'
 
-const MAX_PLAYERS_PER_SIDE = 5
-// const MAX_PLAYERS_PER_SIDE = 1
+const MAX_PLAYERS_PER_SIDE = Number(process.env.MAX_PLAYERS_PER_SIDE)
 
 export type MatchProps = {
   winner?: 'NOT_YET_FINISHED' | 'RED_SIDE' | 'BLUE_SIDE' | 'REMAKE'

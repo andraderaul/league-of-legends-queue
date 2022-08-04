@@ -4,8 +4,7 @@ import {
   RoomRepositoryInterface,
 } from '../../../domain'
 
-// const NUMBER_PLAYERS_PER_SIDE = 5
-const NUMBER_PLAYERS_PER_SIDE = 1
+const NUMBER_PLAYERS_PER_SIDE = Number(process.env.NUMBER_PLAYERS_PER_SIDE)
 
 type Player = { id: string; name: string; rank: number }
 
