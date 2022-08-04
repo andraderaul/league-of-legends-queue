@@ -4,7 +4,7 @@ import {
   RoomRepositoryInterface,
 } from '../../../domain'
 
-const NUMBER_PLAYERS_PER_SIDE = Number(process.env.NUMBER_PLAYERS_PER_SIDE)
+const MAX_PLAYERS_PER_SIDE = Number(process.env.MAX_PLAYERS_PER_SIDE)
 
 type Player = { id: string; name: string; rank: number }
 
@@ -54,8 +54,8 @@ export class FindMatchUseCase {
       /* when two rooms have five players */
       if (
         selected.length === 2 &&
-        selected[0].roomLength === NUMBER_PLAYERS_PER_SIDE &&
-        selected[1].roomLength === NUMBER_PLAYERS_PER_SIDE
+        selected[0].roomLength === MAX_PLAYERS_PER_SIDE &&
+        selected[1].roomLength === MAX_PLAYERS_PER_SIDE
       ) {
         const result = {
           id: '',
@@ -76,7 +76,7 @@ export class FindMatchUseCase {
       }
 
       for (let i = 0; i < selected.length; i++) {
-        const key = NUMBER_PLAYERS_PER_SIDE - selected[i].roomLength
+        const key = MAX_PLAYERS_PER_SIDE - selected[i].roomLength
         console.log(hash[key], selected[i].roomLength)
         if (hash[key]?.length && !hash[key].includes(i)) {
           const hashKey = hash[key].pop()
@@ -153,7 +153,7 @@ export class FindMatchUseCase {
 
       const total = selected.reduce((acc, curr) => acc + curr.roomLength, 0)
 
-      if (total < NUMBER_PLAYERS_PER_SIDE * 2) {
+      if (total < MAX_PLAYERS_PER_SIDE * 2) {
         return [new Error("There aren't enough players"), null]
       }
 
@@ -170,7 +170,7 @@ export class FindMatchUseCase {
           let aux = 0
           while (j < selected.length) {
             if (
-              aux + selected[j].roomLength <= NUMBER_PLAYERS_PER_SIDE &&
+              aux + selected[j].roomLength <= MAX_PLAYERS_PER_SIDE &&
               !sides?.[0]?.includes(j)
             ) {
               aux += selected[j].roomLength
@@ -179,7 +179,7 @@ export class FindMatchUseCase {
             j++
           }
 
-          if (aux === NUMBER_PLAYERS_PER_SIDE) {
+          if (aux === MAX_PLAYERS_PER_SIDE) {
             sides.push(time)
           }
         }

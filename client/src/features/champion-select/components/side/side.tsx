@@ -1,9 +1,11 @@
 import { Card } from "../card";
 import { useMemo } from "react";
+import { LoadingPlayers } from "../loading-players";
 
+type SideColor = "blue" | "red";
 type SideProps = {
   title: string;
-  sideColor: "blue" | "red";
+  sideColor: SideColor;
   players?: Array<{
     id: string;
     name: string;
@@ -30,6 +32,7 @@ export const Side = ({ players, title, sideColor }: SideProps) => {
           name={b.name ?? "default"}
         />
       ))}
+      <LoadingPlayers length={players?.length ?? 0} />
     </div>
   );
 };
