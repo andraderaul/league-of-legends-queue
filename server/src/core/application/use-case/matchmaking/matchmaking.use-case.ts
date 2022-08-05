@@ -6,21 +6,25 @@ import {
 
 const MAX_PLAYERS_PER_SIDE = Number(process.env.MAX_PLAYERS_PER_SIDE)
 
-type Player = { id: string; name: string; rank: number }
+type Player = {
+  id: string
+  name: string
+  rank: number
+}
 
-type FindMatchOutput = {
+type MatchmakingOutput = {
   id: string
   blueSide: Array<Player>
   redSide: Array<Player>
 }
 
-export class FindMatchUseCase {
+export class MatchmakingUseCase {
   constructor(
     private roomRepo: RoomRepositoryInterface,
     private playerRepo: PlayerRepositoryInterface
   ) {}
 
-  async executeLegacy(): Promise<[Error | null, FindMatchOutput | null]> {
+  async executeLegacy(): Promise<[Error | null, MatchmakingOutput | null]> {
     try {
       const rooms = await this.roomRepo.findAllInQueue()
 
@@ -123,7 +127,7 @@ export class FindMatchUseCase {
   //READ THOSE:
   // https://en.wikipedia.org/wiki/Quadratic_assignment_problem
   // https://www.geeksforgeeks.org/job-assignment-problem-using-branch-and-bound/
-  async execute(): Promise<[Error | null, FindMatchOutput | null]> {
+  async execute(): Promise<[Error | null, MatchmakingOutput | null]> {
     try {
       const rooms = await this.roomRepo.findAllInQueue()
 

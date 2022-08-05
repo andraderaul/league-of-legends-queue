@@ -4,7 +4,7 @@ export {
   CreateRoomUseCase,
   JoinRoomUseCase,
   ListAllRoomsUseCase,
-  FindMatchUseCase,
+  MatchmakingUseCase,
   StartQueueUseCase,
   StopQueueUseCase,
   CreateMatchUseCase,

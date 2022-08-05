@@ -5,7 +5,7 @@ import cors from 'cors'
 import router from './routes'
 import { Server } from 'socket.io'
 import { playerRepo, roomRepo } from './repository'
-import { FindMatchUseCase, ListAllRoomsUseCase } from '../../core/application'
+import { MatchmakingUseCase, ListAllRoomsUseCase } from '../../core/application'
 
 const port = process.env.PORT || 3001
 const app: Express = express()
@@ -70,8 +70,8 @@ async function matchmaking() {
   console.log(JSON.stringify({ rooms }, null, 2))
   console.log('###########\n')
 
-  const matchUseCase = new FindMatchUseCase(roomRepo, playerRepo)
-  const [error, output] = await matchUseCase.execute()
+  const matchmakingUseCase = new MatchmakingUseCase(roomRepo, playerRepo)
+  const [error, output] = await matchmakingUseCase.execute()
 
   console.log('\n###MATCH###')
   console.log({ message: error?.message })

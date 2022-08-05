@@ -5,9 +5,9 @@ import {
 } from '../../../infra/db'
 import { CreatePlayerUseCase } from '../create-player'
 import { CreateRoomUseCase } from '../create-room'
-import { FindMatchUseCase } from './find-match.use-case'
+import { MatchmakingUseCase } from './matchmaking.use-case'
 
-describe('Testing FindMatchUseCase', () => {
+describe('Testing MatchmakingUseCase', () => {
   it('should have match, when two rooms has three players and two rooms has two players', async () => {
     const roomRepository = new RoomInMemoryRepository()
     const playerRepository = new PlayerInMemoryRepository()
@@ -94,7 +94,10 @@ describe('Testing FindMatchUseCase', () => {
     await createUseCase.execute(input3)
     await createUseCase.execute(input4)
 
-    const matchUseCase = new FindMatchUseCase(roomRepository, playerRepository)
+    const matchUseCase = new MatchmakingUseCase(
+      roomRepository,
+      playerRepository
+    )
     const [error, output] = await matchUseCase.execute()
     expect(error).toBeNull()
     expect(output?.blueSide).toStrictEqual([p1, p2, p3, p4, p5])
@@ -206,7 +209,10 @@ describe('Testing FindMatchUseCase', () => {
     await createUseCase.execute(input5)
     await createUseCase.execute(input6)
 
-    const matchUseCase = new FindMatchUseCase(roomRepository, playerRepository)
+    const matchUseCase = new MatchmakingUseCase(
+      roomRepository,
+      playerRepository
+    )
     const [error, output] = await matchUseCase.execute()
     expect(error).toBeNull()
     expect(output?.blueSide).toStrictEqual([p1, p2, p3, pA, pD])
@@ -281,7 +287,10 @@ describe('Testing FindMatchUseCase', () => {
     await createUseCase.execute(input1)
     await createUseCase.execute(input2)
 
-    const matchUseCase = new FindMatchUseCase(roomRepository, playerRepository)
+    const matchUseCase = new MatchmakingUseCase(
+      roomRepository,
+      playerRepository
+    )
     const [error, output] = await matchUseCase.execute()
     expect(error).toBeNull()
     expect(output?.blueSide).toStrictEqual([p1, p2, p3, p4, p5])
@@ -373,7 +382,10 @@ describe('Testing FindMatchUseCase', () => {
     await createUseCase.execute(input3)
     await createUseCase.execute(input4)
 
-    const matchUseCase = new FindMatchUseCase(roomRepository, playerRepository)
+    const matchUseCase = new MatchmakingUseCase(
+      roomRepository,
+      playerRepository
+    )
     const [error, output] = await matchUseCase.execute()
     expect(error).toBeNull()
     expect(output?.blueSide).toStrictEqual([p1, p2, p3, p4, p5])
@@ -503,7 +515,10 @@ describe('Testing FindMatchUseCase', () => {
     await createUseCase.execute(inputD)
     await createUseCase.execute(inputE)
 
-    const matchUseCase = new FindMatchUseCase(roomRepository, playerRepository)
+    const matchUseCase = new MatchmakingUseCase(
+      roomRepository,
+      playerRepository
+    )
     const [error, output] = await matchUseCase.execute()
     expect(error).toBeNull()
 
@@ -590,7 +605,10 @@ describe('Testing FindMatchUseCase', () => {
     await createUseCase.execute(input3)
     await createUseCase.execute(input4)
 
-    const matchUseCase = new FindMatchUseCase(roomRepository, playerRepository)
+    const matchUseCase = new MatchmakingUseCase(
+      roomRepository,
+      playerRepository
+    )
     const [error] = await matchUseCase.execute()
     expect(error?.message).toBe("There aren't enough players")
   })
