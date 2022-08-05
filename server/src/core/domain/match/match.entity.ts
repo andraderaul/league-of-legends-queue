@@ -84,20 +84,18 @@ export class Match {
         playerId,
       ])
     ) {
-      throw new Error(`There are duplicated players`)
+      throw new Error(
+        `There are duplicated players in ${side.toLocaleLowerCase()} side`
+      )
     }
 
     if (
-      side === 'BLUE' &&
-      this.checkPlayersPerSide([...(this.props?.blueSide ?? []), playerId])
-    ) {
-      throw new Error(`Max Players per blue side exceeded`)
-    }
-    if (
-      side === 'RED' &&
+      this.checkPlayersPerSide([...(this.props?.blueSide ?? []), playerId]) ||
       this.checkPlayersPerSide([...(this.props?.redSide ?? []), playerId])
     ) {
-      throw new Error(`Max Players per red side exceeded`)
+      throw new Error(
+        `Max Players per ${side.toLocaleLowerCase()} side exceeded`
+      )
     }
 
     side === 'RED' ? (this.redSide = playerId) : (this.blueSide = playerId)
@@ -107,17 +105,9 @@ export class Match {
     this.props.blueSide?.push(value)
   }
 
-  // get blueSide() {
-  //   return this.props?.blueSide
-  // }
-
   private set redSide(value: string) {
     this.props.redSide?.push(value)
   }
-
-  // get redSide() {
-  //   return this.props?.redSide
-  // }
 
   toJson() {
     return {

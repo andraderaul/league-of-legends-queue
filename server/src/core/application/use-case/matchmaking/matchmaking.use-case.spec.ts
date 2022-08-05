@@ -27,7 +27,7 @@ describe('Testing MatchmakingUseCase', () => {
     })
 
     const input1 = {
-      name: 'Room-7',
+      name: 'Room-1',
       players: [p1!.id, p2!.id, p3!.id],
       owner: p1!.id,
       inQueue: true,
@@ -49,7 +49,7 @@ describe('Testing MatchmakingUseCase', () => {
     })
 
     const input2 = {
-      name: 'Room-10',
+      name: 'Room-2',
       players: [pA!.id, pB!.id, pC!.id],
       owner: pA!.id,
       inQueue: true,
@@ -66,7 +66,7 @@ describe('Testing MatchmakingUseCase', () => {
       rank: 30,
     })
     const input3 = {
-      name: 'Room-11',
+      name: 'Room-3',
       players: [p4!.id, p5!.id],
       owner: p4!.id,
       inQueue: true,
@@ -82,7 +82,7 @@ describe('Testing MatchmakingUseCase', () => {
       rank: 80,
     })
     const input4 = {
-      name: 'Room-10',
+      name: 'Room-4',
       players: [pD!.id, pE!.id],
       owner: pD!.id,
       inQueue: true,
@@ -320,7 +320,7 @@ describe('Testing MatchmakingUseCase', () => {
     })
 
     const input1 = {
-      name: 'Room-7',
+      name: 'Room-1',
       players: [p1!.id, p2!.id, p3!.id, p4!.id],
       owner: p1!.id,
       inQueue: true,
@@ -346,7 +346,7 @@ describe('Testing MatchmakingUseCase', () => {
     })
 
     const input2 = {
-      name: 'Room-10',
+      name: 'Room-2',
       players: [pA!.id, pB!.id, pC!.id, pD!.id],
       owner: pA!.id,
       inQueue: true,
@@ -358,7 +358,7 @@ describe('Testing MatchmakingUseCase', () => {
       rank: 30,
     })
     const input3 = {
-      name: 'Room-11',
+      name: 'Room-3',
       players: [p5!.id],
       owner: p5!.id,
       inQueue: true,
@@ -370,7 +370,7 @@ describe('Testing MatchmakingUseCase', () => {
       rank: 79,
     })
     const input4 = {
-      name: 'Room-10',
+      name: 'Room-4',
       players: [pE!.id],
       owner: pE!.id,
       inQueue: true,
