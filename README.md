@@ -64,7 +64,7 @@ cp client/.env.example client/.env & cp server/.env.example server/.env
 
 ## Demo
 
-![screen-record](./assets/screen-record.gif)
+[Screen Record](./assets/screen-record.gif)
 
 ## Stack
 
