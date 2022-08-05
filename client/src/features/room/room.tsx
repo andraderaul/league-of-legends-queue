@@ -16,7 +16,7 @@ export const Room = ({ room, player }: RoomProps) => {
   const { mutate: stopMutate } = useStopQueueMutation();
 
   const buttonName = useMemo(
-    () => (status === "queue" ? "Stop" : "Start"),
+    () => (status === "queue" ? "Stop" : "Find Match"),
     [status]
   );
 
@@ -70,7 +70,7 @@ export const Room = ({ room, player }: RoomProps) => {
         ))}
       </div>
 
-      {room?.owner === player?.id && (
+      {room?.owner === player?.id ? (
         <button
           className={`mr-2 bg-${buttonColor}-500 rounded-lg
         w-1/2 h-10 text-white 
@@ -81,6 +81,12 @@ export const Room = ({ room, player }: RoomProps) => {
         >
           {buttonName}
         </button>
+      ) : room?.inQueue ? (
+        <p className="mt-2 text-3xl text-green-500 mr-1 font-light">In Queue</p>
+      ) : (
+        <p className="mt-2 text-3xl text-red-500 mr-1 font-light">
+          Waiting start queue
+        </p>
       )}
     </div>
   );

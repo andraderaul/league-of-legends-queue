@@ -5,6 +5,7 @@ import {
   StopQueueUseCase,
 } from '../../../core/application'
 import { playerRepo, roomRepo } from '../repository'
+import { io } from '..'
 
 const queues = Router()
 
@@ -36,7 +37,10 @@ queues.post('/start', async (req: Request, res: Response) => {
     players.push(player)
   }
 
-  res.status(200).json({ ...output, players })
+  const result = { ...output, players }
+
+  io.emit(`rooms-${output?.name}`, result)
+  res.status(200).json(result)
 })
 
 queues.post('/stop', async (req: Request, res: Response) => {
@@ -67,7 +71,10 @@ queues.post('/stop', async (req: Request, res: Response) => {
     players.push(player)
   }
 
-  res.status(200).json({ ...output, players })
+  const result = { ...output, players }
+
+  io.emit(`rooms-${output?.name}`, result)
+  res.status(200).json(result)
 })
 
 export default queues
