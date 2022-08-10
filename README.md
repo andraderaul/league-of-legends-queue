@@ -84,14 +84,6 @@ cp client/.env.example client/.env & cp server/.env.example server/.env
 - [Socket.IO](https://socket.io/)
 - [Jest](https://jestjs.io/)
 
-## Related projects
-
--
-
-## References
-
--
-
 ## License
 
 [MIT](./LICENSE)
